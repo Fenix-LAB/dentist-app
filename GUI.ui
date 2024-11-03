@@ -721,7 +721,7 @@ color:rgb(218,0,55);
                   <string/>
                  </property>
                  <property name="pixmap">
-                  <pixmap>../Modulo_CD/icons/Health-PNG-HD-Quality.png</pixmap>
+                  <pixmap>images/pngwing.com.png</pixmap>
                  </property>
                  <property name="scaledContents">
                   <bool>true</bool>

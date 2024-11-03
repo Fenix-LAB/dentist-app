@@ -22,6 +22,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_cerrar.clicked.connect(self.control_btn_cerrar)
         self.btn_normal.clicked.connect(self.control_btn_normal)
         self.btn_max.clicked.connect(self.control_btn_maximizar)
+        self.btn_45_grd.clicked.connect(self.set_45_degrees)
+        self.btn_55_grd.clicked.connect(self.set_55_degrees)
+        self.btn_boca_cerrada.clicked.connect(self.set_0_degrees)
 
 
         # Se elimina la barra de titulo por default
@@ -48,17 +51,59 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.serial.readyRead.connect(self.read_data)
 
         # Graficas
-        self.x = list(np.linspace(0, 150, 150))
-        self.y = list(np.linspace(0, 0, 150))
+        self.x = list(np.linspace(0, 100, 100))
+        self.y = list(np.linspace(0, 0, 100))
 
         # Creacion de la grafica 1
+        # pg.setConfigOption('background', '#ebfeff')
+        # pg.setConfigOption('foreground', '#000000')
+        # self.plt = pg.PlotWidget(title='Apertura')
+        # self.graph_apertura.addWidget(self.plt)
         pg.setConfigOption('background', '#ebfeff')
         pg.setConfigOption('foreground', '#000000')
         self.plt = pg.PlotWidget(title='Apertura')
+        self.plt.getAxis('left').setTicks([])  # Oculta los ticks del eje Y
+        self.plt.getAxis('bottom').setTicks([])  # Oculta los ticks del eje X
         self.graph_apertura.addWidget(self.plt)
 
         # Se inician los siguientes metodos y atributos adicionles
         self.read_ports()
+
+    def set_55_degrees(self):
+        print("55")
+        self.plt.clear()
+        # first point
+        x = np.linspace(0, 0, 100)
+        y = np.linspace(0, 0, 100)
+        # second point
+        x = np.linspace(0, 70, 100)
+        y = np.linspace(0, 100, 100)
+        self.plt.plot(x, y, pen=pg.mkPen('#1300FF', width=2))
+        print("done")
+
+    def set_0_degrees(self):
+        print("0")
+        self.plt.clear()
+        # first point
+        x = np.linspace(0, 0, 100)
+        y = np.linspace(0, 0, 100)
+        # second point
+        x = np.linspace(0, 100, 100)
+        y = np.linspace(0, 0, 100)
+        self.plt.plot(x, y, pen=pg.mkPen('#1300FF', width=2))
+        print("done")
+
+    def set_45_degrees(self):
+        print("45")
+        self.plt.clear()
+        # first point
+        x = np.linspace(0, 0, 100)
+        y = np.linspace(0, 0, 100)
+        # second point
+        x = np.linspace(0, 100, 100)
+        y = np.linspace(0, 100, 100)
+        self.plt.plot(x, y, pen=pg.mkPen('#1300FF', width=2))
+        print("done")
 
     # Metodo del boton de menu
     def mover_menu(self):
