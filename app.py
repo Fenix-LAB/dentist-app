@@ -59,7 +59,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # Asociacion de metodos
         self.serial.readyRead.connect(self.read_data)
         self.read_ports()
-        # self.simulate_cambio_dientes()
 
     def set_55_degrees(self):
         """
