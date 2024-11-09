@@ -26,6 +26,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_45_grd.clicked.connect(self.set_45_degrees)
         self.btn_55_grd.clicked.connect(self.set_55_degrees)
         self.btn_boca_cerrada.clicked.connect(self.set_0_degrees)
+        self.btn_guardar.clicked.connect(self.guardar_datos)
 
         self.status_dientes = {
             "ps1": False,
@@ -65,6 +66,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Metodo para enviar la imagen de la boca a 55 grados
         """
         self.img_boca.setPixmap(QPixmap("images/boca_55.png"))
+        self.send_data("B55")
         # self.simulate_cambio_dientes()
 
     def set_0_degrees(self):
@@ -72,12 +74,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Metodo para enviar la imagen de la boca a 0 grados
         """
         self.img_boca.setPixmap(QPixmap("images/bocs_cerrada.png"))
+        self.send_data("B0")
 
     def set_45_degrees(self):
         """
         Metodo para enviar la imagen de la boca a 45 grados
         """
         self.img_boca.setPixmap(QPixmap("images/bocs_45.png"))
+        self.send_data("B45")
 
 
     def change_diente_status(self, sensor: str , status: bool) -> dict:
@@ -143,7 +147,34 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.change_diente_status("ms2", not self.status_dientes["ms2"])
         self.change_diente_status("ps3", not self.status_dientes["ps3"])
         self.change_diente_status("ms3", not self.status_dientes["ms3"])
-    
+
+    def guardar_datos(self):
+        """
+        Metodo para guardar los datos de los sensores en la tabla y generar un excel
+        """
+        # Se obtiene la fecha y hora actual
+        fecha = time.strftime("%d-%m-%Y")
+        hora = time.strftime("%H-%M-%S")
+        nombre = self.line_nombre.text()
+        matricula = self.line_matricula.text()
+        # Se crea el nombre del archivo
+        nombre_archivo = f"datos_sensores_{fecha}_{hora}.csv"
+
+        # Se crea el archivo
+
+        # Guardar en la tabla
+        # self.table_datos.setRowCount(0)
+        self.table_datos.insertRow(0)
+        self.table_datos.setItem(0, 0, QtWidgets.QTableWidgetItem(nombre))
+        self.table_datos.setItem(0, 1, QtWidgets.QTableWidgetItem(matricula))
+        self.table_datos.setItem(0, 2, QtWidgets.QTableWidgetItem(str(self.status_dientes["ps1"])))
+        self.table_datos.setItem(0, 3, QtWidgets.QTableWidgetItem(str(self.status_dientes["ms1"])))
+        self.table_datos.setItem(0, 4, QtWidgets.QTableWidgetItem(str(self.status_dientes["ps2"])))
+        self.table_datos.setItem(0, 5, QtWidgets.QTableWidgetItem(str(self.status_dientes["ms2"])))
+        self.table_datos.setItem(0, 6, QtWidgets.QTableWidgetItem(str(self.status_dientes["ps3"])))
+        self.table_datos.setItem(0, 7, QtWidgets.QTableWidgetItem(str(self.status_dientes["ms3"])))
+        self.table_datos.setItem(0, 8, QtWidgets.QTableWidgetItem(fecha))
+        self.table_datos.setItem(0, 9, QtWidgets.QTableWidgetItem(hora)
 
     def read_data(self):
         """

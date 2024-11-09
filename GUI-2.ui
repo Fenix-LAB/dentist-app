@@ -1828,11 +1828,6 @@ font: 77 12pt &quot;Arial Black&quot;;
                        </column>
                        <column>
                         <property name="text">
-                         <string>New Column</string>
-                        </property>
-                       </column>
-                       <column>
-                        <property name="text">
                          <string>Premolar 3</string>
                         </property>
                        </column>
@@ -1843,7 +1838,17 @@ font: 77 12pt &quot;Arial Black&quot;;
                        </column>
                        <column>
                         <property name="text">
+                         <string>Molar 2</string>
+                        </property>
+                       </column>
+                       <column>
+                        <property name="text">
                          <string>Molar 3</string>
+                        </property>
+                       </column>
+                       <column>
+                        <property name="text">
+                         <string>Fecha</string>
                         </property>
                        </column>
                       </widget>
