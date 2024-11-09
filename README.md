@@ -5,6 +5,10 @@ Aplicación de escritorio para la...
 ## Requisitos
 - Python 3.10
 - Qt Designer
+- Verifca que python este bien instalado, yo uso el que se descarga en Microsoft Store y me funciona bien.
+```bash
+python --version
+```
 
 ## Instalación
 1. Clonar el repositorio (o descargarlo)
@@ -32,3 +36,6 @@ pyuic6 -x archivo.ui -o archivo.py
 # Para este caso:
 pyuic5 -x GUI.ui -o gui_design.py
 ``` 
+
+## Abrir Qt Designer
+Abre la carpeta de QT -> bin -> designer.exe
