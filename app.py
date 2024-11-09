@@ -2,8 +2,6 @@ from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo   # Modulo Serial de
 from PyQt5.QtCore import *                                    # Modulo PyQt5 para intarfaces graficas
 from gui_design import *
 from PyQt5.QtGui import *
-import pyqtgraph as pg
-import numpy as np
 import time
 
 #Clase de la ventana heredada de la interfaz "gui_design.py"
