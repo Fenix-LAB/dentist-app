@@ -4,6 +4,7 @@ from gui_design import *
 from PyQt5.QtGui import *
 import pyqtgraph as pg
 import numpy as np
+import time
 
 #Clase de la ventana heredada de la interfaz "gui_design.py"
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -26,6 +27,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_55_grd.clicked.connect(self.set_55_degrees)
         self.btn_boca_cerrada.clicked.connect(self.set_0_degrees)
 
+        self.status_dientes = {
+            "ps1": False,
+            "ms1": False,
+            "ps2": False,
+            "ms2": False,
+            "ps3": False,
+            "ms3": False
+        }
 
         # Se elimina la barra de titulo por default
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
@@ -49,61 +58,113 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Asociacion de metodos
         self.serial.readyRead.connect(self.read_data)
-
-        # Graficas
-        self.x = list(np.linspace(0, 100, 100))
-        self.y = list(np.linspace(0, 0, 100))
-
-        # Creacion de la grafica 1
-        # pg.setConfigOption('background', '#ebfeff')
-        # pg.setConfigOption('foreground', '#000000')
-        # self.plt = pg.PlotWidget(title='Apertura')
-        # self.graph_apertura.addWidget(self.plt)
-        pg.setConfigOption('background', '#ebfeff')
-        pg.setConfigOption('foreground', '#000000')
-        self.plt = pg.PlotWidget(title='Apertura')
-        self.plt.getAxis('left').setTicks([])  # Oculta los ticks del eje Y
-        self.plt.getAxis('bottom').setTicks([])  # Oculta los ticks del eje X
-        self.graph_apertura.addWidget(self.plt)
-
-        # Se inician los siguientes metodos y atributos adicionles
         self.read_ports()
+        # self.simulate_cambio_dientes()
 
     def set_55_degrees(self):
-        print("55")
-        self.plt.clear()
-        # first point
-        x = np.linspace(0, 0, 100)
-        y = np.linspace(0, 0, 100)
-        # second point
-        x = np.linspace(0, 70, 100)
-        y = np.linspace(0, 100, 100)
-        self.plt.plot(x, y, pen=pg.mkPen('#1300FF', width=2))
-        print("done")
+        """
+        Metodo para enviar la imagen de la boca a 55 grados
+        """
+        self.img_boca.setPixmap(QPixmap("images/boca_55.png"))
+        # self.pre_sensor_1.setPixmap(QPixmap("images/premolar_verde.png")) # it works
+        self.simulate_cambio_dientes()
 
     def set_0_degrees(self):
-        print("0")
-        self.plt.clear()
-        # first point
-        x = np.linspace(0, 0, 100)
-        y = np.linspace(0, 0, 100)
-        # second point
-        x = np.linspace(0, 100, 100)
-        y = np.linspace(0, 0, 100)
-        self.plt.plot(x, y, pen=pg.mkPen('#1300FF', width=2))
-        print("done")
+        """
+        Metodo para enviar la imagen de la boca a 0 grados
+        """
+        self.img_boca.setPixmap(QPixmap("images/bocs_cerrada.png"))
 
     def set_45_degrees(self):
-        print("45")
-        self.plt.clear()
-        # first point
-        x = np.linspace(0, 0, 100)
-        y = np.linspace(0, 0, 100)
-        # second point
-        x = np.linspace(0, 100, 100)
-        y = np.linspace(0, 100, 100)
-        self.plt.plot(x, y, pen=pg.mkPen('#1300FF', width=2))
-        print("done")
+        """
+        Metodo para enviar la imagen de la boca a 45 grados
+        """
+        self.img_boca.setPixmap(QPixmap("images/bocs_45.png"))
+
+
+    def change_diente_status(self, sensor: str , status: bool) -> dict:
+        """
+        El color del diente cambia dependiendo del estado del sensor
+        
+        Args:
+            sensor (str): Nombre del sensor (ps1, ms1, ps2, ms2, ps3, ms3)
+            status (bool): Estado del sensor (True: para color verde, False: color blanco)
+        """
+        # Mapeo de los sensores con los labels
+        sensor_map = { # it doesn't work, it's not changing the color
+            "ps1": self.pre_sensor_1,
+            "ms1": self.mo_sensor_1,
+            "ps2": self.pre_sensor_2,
+            "ms2": self.mo_sensor_2,
+            "ps3": self.pre_sensor_3,
+            "ms3": self.mo_sensor_3
+        }
+
+        # Seleccion del label
+        label = sensor_map[sensor]
+
+        print(f"label: {label}, sensor: {sensor}, status: {status}")
+
+        # Cambio de color
+        if status and "pre" in sensor:
+            label.setPixmap(QPixmap("images/premolar_verde.png"))
+        elif status and "mo" in sensor:
+            label.setPixmap(QPixmap("images/molar_verde.png"))
+        elif not status and "pre" in sensor:
+            label.setPixmap(QPixmap("images/premolar_blanco.png"))
+        elif not status and "mo" in sensor:
+            label.setPixmap(QPixmap("images/molar_blanco.png"))
+
+        # Return actual status de los sensores
+        self.status_dientes[sensor] = status
+        # print(self.status_dientes)
+        return self.status_dientes
+        
+
+    def simulate_cambio_dientes(self):  
+        """
+        Metodo para simular el cambio de estado de los sensores
+        """
+        # Se cambia el estado de los sensores
+        while True:
+            for sensor in self.status_dientes:
+                status = self.status_dientes[sensor]
+                self.change_diente_status(sensor, not status)
+                time.sleep(1)
+
+    def read_data(self):
+        """
+        Metodo para leer los datos enviados por el microcontrolador
+        El microcontrolador envia los datos de los sensores en el siguiente formato:
+        psa:1,psb:1,psc:1,msa:1,msb:1,msc:1
+
+        Donde:
+        psa1: Estado del sensor pre_sensor_1 1: activo, 0: inactivo
+        psb1: Estado del sensor pre_sensor_2 1: activo, 0: inactivo
+        psc1: Estado del sensor pre_sensor_3 1: activo, 0: inactivo
+        msa1: Estado del sensor mo_sensor_1 1: activo, 0: inactivo
+        msb1: Estado del sensor mo_sensor_2 1: activo, 0: inactivo
+        msc1: Estado del sensor mo_sensor_3 1: activo, 0: inactivo
+
+        Favor de costruir el microcontrolador con este formato de envio de datos
+        """
+        if not self.serial.canReadLine(): return
+        rx = self.serial.readLine()
+        datos = str(rx, 'utf-8').strip()
+
+        # La data debe venir en el siguiente formato:
+        # psa:1,psb:0,psc:1,msa:0,msb:1,msc:0
+
+        print(f"Datos (solo para debug): {datos}")
+
+        # Se separan los datos
+        for data in datos.split(","):
+            data = data.split(":")
+            sensor = data[0]
+            status = data[1]
+            self.change_diente_status(sensor, bool(int(status)))
+
+       
 
     # Metodo del boton de menu
     def mover_menu(self):
@@ -186,33 +247,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.serial.setPortName(self.port)
         self.serial.open(QIODevice.ReadWrite)
 
-    # Metodo para leer datos seriales (No se uso en esta aplicacion)
-    def read_data(self):
-        if not self.serial.canReadLine(): return
-        rx = self.serial.readLine()
-        datos = str(rx, 'utf-8').strip()
-        listaDatos = datos.split(",")
-        self.dato1 = listaDatos[0]
-        self.dato2 = listaDatos[1]
-        self.dato3 = listaDatos[2]
-        print(self.dato1)
-        print(self.dato2)
-        print(self.dato3)
-
-        x1 = float(self.dato3)
-
-        self.y = self.y[1:]
-        self.y.append(x1)
-
-        self.plt.clear()
-        self.plt.plot(self.x, self.y, pen=pg.mkPen('#1300FF', width=2))
-
-        self.showInfo()
-
-    def showInfo(self):
-        self.val_RC.setText(str(self.dato1))
-        self.val_porcentaje.setText(str(self.dato2))
-        self.indicator_oxigeno(int(self.dato3))
+    
+        
 
     # Metodo para enviar datos por comunicacion Serial
     def send_data(self, data):
@@ -222,27 +258,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.serial.isOpen():
             self.serial.write(data.encode())
             #print("enviado")
-
-    def indicator_oxigeno(self, val):
-        # Indicador de temperatura
-        estilo_temp = """QFrame{
-        border-radius: 100px;
-        background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:{stop1} rgba(255, 72, 72, 255), stop:{stop2} rgba(255, 188, 188, 80));
-        }"""
-        # Indicadores de 0 a 1
-        # Stop2 es el valor al que se coloca el indicador
-        if val > 100 or val < 0:
-            self.val_acotado = 100
-
-        self.val_porcentaje.setText(str(self.val_acotado))
-
-        self.val_map = val/100
-        stop2 = val
-        stop1 = stop2 - 0.001
-        Sstop1 = str(stop1)
-        Sstop2 = str(stop2)
-        nuevo_estilo = estilo_temp.replace('{stop1}', Sstop1).replace('{stop2}', Sstop2)
-        self.Indicador_OS.setStyleSheet(nuevo_estilo)
 
 
 if __name__ == "__main__":
