@@ -22,7 +22,7 @@ pip install -r requirements.txt
 ```
 5. Ejecutar la aplicación:
 ```bash
-python main.py
+python app.py
 ```
 
 ## Crear .py a partir de .ui
@@ -31,4 +31,4 @@ python main.py
 pyuic6 -x archivo.ui -o archivo.py
 # Para este caso:
 pyuic5 -x GUI.ui -o gui_design.py
-```
+``` 
