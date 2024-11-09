@@ -158,7 +158,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         nombre = self.line_nombre.text()
         matricula = self.line_matricula.text()
         # Se crea el nombre del archivo
-        nombre_archivo = f"datos_sensores_{fecha}_{hora}.csv"
+        # nombre_archivo = f"datos_sensores_{fecha}_{hora}.csv"
 
         # Se crea el archivo
 
