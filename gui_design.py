@@ -865,7 +865,7 @@ class Ui_MainWindow(object):
         self.table_datos.setMinimumSize(QtCore.QSize(387, 400))
         self.table_datos.setMaximumSize(QtCore.QSize(387, 400))
         self.table_datos.setObjectName("table_datos")
-        self.table_datos.setColumnCount(9)
+        self.table_datos.setColumnCount(10)
         self.table_datos.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.table_datos.setHorizontalHeaderItem(0, item)
@@ -885,6 +885,8 @@ class Ui_MainWindow(object):
         self.table_datos.setHorizontalHeaderItem(7, item)
         item = QtWidgets.QTableWidgetItem()
         self.table_datos.setHorizontalHeaderItem(8, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.table_datos.setHorizontalHeaderItem(9, item)
         self.verticalLayout_26.addWidget(self.table_datos)
         self.verticalLayout_10.addLayout(self.verticalLayout_26)
         self.horizontalLayout.addWidget(self.frame_6)
@@ -942,6 +944,8 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Molar 3"))
         item = self.table_datos.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Fecha"))
+        item = self.table_datos.horizontalHeaderItem(9)
+        item.setText(_translate("MainWindow", "Hora"))
 
 
 if __name__ == "__main__":

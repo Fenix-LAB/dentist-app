@@ -1851,6 +1851,11 @@ font: 77 12pt &quot;Arial Black&quot;;
                          <string>Fecha</string>
                         </property>
                        </column>
+                       <column>
+                        <property name="text">
+                         <string>Hora</string>
+                        </property>
+                       </column>
                       </widget>
                      </item>
                     </layout>

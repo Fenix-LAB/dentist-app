@@ -174,7 +174,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_datos.setItem(0, 6, QtWidgets.QTableWidgetItem(str(self.status_dientes["ps3"])))
         self.table_datos.setItem(0, 7, QtWidgets.QTableWidgetItem(str(self.status_dientes["ms3"])))
         self.table_datos.setItem(0, 8, QtWidgets.QTableWidgetItem(fecha))
-        self.table_datos.setItem(0, 9, QtWidgets.QTableWidgetItem(hora)
+        self.table_datos.setItem(0, 9, QtWidgets.QTableWidgetItem(hora))
 
     def read_data(self):
         """
