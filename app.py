@@ -64,7 +64,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Metodo para enviar la imagen de la boca a 55 grados
         """
         self.img_boca.setPixmap(QPixmap("images/boca_55.png"))
-        self.send_data("B55")
+        self.send_data("55")
         # self.simulate_cambio_dientes()
 
     def set_0_degrees(self):
@@ -72,14 +72,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Metodo para enviar la imagen de la boca a 0 grados
         """
         self.img_boca.setPixmap(QPixmap("images/bocs_cerrada.png"))
-        self.send_data("B0")
+        self.send_data("0")
 
     def set_45_degrees(self):
         """
         Metodo para enviar la imagen de la boca a 45 grados
         """
         self.img_boca.setPixmap(QPixmap("images/bocs_45.png"))
-        self.send_data("B45")
+        self.send_data("45")
 
 
     def change_diente_status(self, sensor: str , status: bool) -> dict:
