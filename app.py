@@ -66,8 +66,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Metodo para enviar la imagen de la boca a 55 grados
         """
         self.img_boca.setPixmap(QPixmap("images/boca_55.png"))
-        # self.pre_sensor_1.setPixmap(QPixmap("images/premolar_verde.png")) # it works
-        self.simulate_cambio_dientes()
+        # self.simulate_cambio_dientes()
 
     def set_0_degrees(self):
         """
@@ -90,33 +89,47 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             sensor (str): Nombre del sensor (ps1, ms1, ps2, ms2, ps3, ms3)
             status (bool): Estado del sensor (True: para color verde, False: color blanco)
         """
-        # Mapeo de los sensores con los labels
-        sensor_map = { # it doesn't work, it's not changing the color
-            "ps1": self.pre_sensor_1,
-            "ms1": self.mo_sensor_1,
-            "ps2": self.pre_sensor_2,
-            "ms2": self.mo_sensor_2,
-            "ps3": self.pre_sensor_3,
-            "ms3": self.mo_sensor_3
-        }
+        # Se cambia el color del diente
+        print(f"change {sensor} a {status}")
+        if sensor == "ps1":
+            if status:
+                self.pre_sensor_1.setPixmap(QPixmap("images/premolar_verde.png"))
+            else:
+                self.pre_sensor_1.setPixmap(QPixmap("images/premolar_blanco.png"))
 
-        # Seleccion del label
-        label = sensor_map[sensor]
+        if sensor == "ms1":
+            if status:
+                self.mo_sensor_1.setPixmap(QPixmap("images/molar_verde.png"))
+            else:
+                self.mo_sensor_1.setPixmap(QPixmap("images/molar_blanco.png"))
 
-        print(f"label: {label}, sensor: {sensor}, status: {status}")
+        if sensor == "ps2":
+            if status:
+                self.pre_sensor_2.setPixmap(QPixmap("images/premolar_verde.png"))
+            else:
+                self.pre_sensor_2.setPixmap(QPixmap("images/premolar_blanco.png"))
 
-        # Cambio de color
-        if status and "pre" in sensor:
-            label.setPixmap(QPixmap("images/premolar_verde.png"))
-        elif status and "mo" in sensor:
-            label.setPixmap(QPixmap("images/molar_verde.png"))
-        elif not status and "pre" in sensor:
-            label.setPixmap(QPixmap("images/premolar_blanco.png"))
-        elif not status and "mo" in sensor:
-            label.setPixmap(QPixmap("images/molar_blanco.png"))
+        if sensor == "ms2":
+            if status:
+                self.mo_sensor_2.setPixmap(QPixmap("images/molar_verde.png"))
+            else:
+                self.mo_sensor_2.setPixmap(QPixmap("images/molar_blanco.png"))
+
+        if sensor == "ps3":
+            if status:
+                self.pre_sensor_3.setPixmap(QPixmap("images/premolar_verde.png"))
+            else:
+                self.pre_sensor_3.setPixmap(QPixmap("images/premolar_blanco.png"))
+
+        if sensor == "ms3":
+            if status:
+                self.mo_sensor_3.setPixmap(QPixmap("images/molar_verde.png"))
+            else:
+                self.mo_sensor_3.setPixmap(QPixmap("images/molar_blanco.png"))
 
         # Return actual status de los sensores
         self.status_dientes[sensor] = status
+        print('done')
         # print(self.status_dientes)
         return self.status_dientes
         
@@ -125,12 +138,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         Metodo para simular el cambio de estado de los sensores
         """
-        # Se cambia el estado de los sensores
-        while True:
-            for sensor in self.status_dientes:
-                status = self.status_dientes[sensor]
-                self.change_diente_status(sensor, not status)
-                time.sleep(1)
+        self.change_diente_status("ps1", not self.status_dientes["ps1"])
+        self.change_diente_status("ms1", not self.status_dientes["ms1"])
+        self.change_diente_status("ps2", not self.status_dientes["ps2"])
+        self.change_diente_status("ms2", not self.status_dientes["ms2"])
+        self.change_diente_status("ps3", not self.status_dientes["ps3"])
+        self.change_diente_status("ms3", not self.status_dientes["ms3"])
+    
 
     def read_data(self):
         """
