@@ -18,7 +18,7 @@ python -m venv venv
 ```
 3. Activar el entorno virtual:
 ```bash
-source venv/Scripts/activate
+venv/Scripts/activate
 ```
 4. Instalar las dependencias:
 ```bash
@@ -39,3 +39,17 @@ pyuic5 -x GUI.ui -o gui_design.py
 
 ## Abrir Qt Designer
 Abre la carpeta de QT -> bin -> designer.exe
+
+## Generar ejecutable con PyInstaller
+1. Instalar PyInstaller:
+```bash
+pip install pyinstaller
+```
+2. Crear el ejecutable, en la carpeta del proyecto (iconos, imagesn etc. deben estar en la misma carpeta):
+```bash
+pyinstaller --onefile --windowed app.py
+```
+3. Ejecutar el ejecutable:
+```bash
+dist/app.exe
+```
